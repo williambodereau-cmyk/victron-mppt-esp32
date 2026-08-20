@@ -1,0 +1,100 @@
+esphome:
+  name: victron-mppt
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+external_components:
+  - source: github://Fabian-Schmidt/esphome-victron_ble
+
+logger:
+  level: INFO
+
+ota:
+  - platform: esphome
+    password: "choisis-un-mot-de-passe-ota"
+
+wifi:
+  networks:
+    - ssid: "Cudy-b588"
+      password: "45244773"
+    - ssid: "iPhone de Bodereau William"
+      password: "hiboufou"
+  ap:
+    ssid: "Victron-MPPT Fallback"
+    password: "fallback1234"
+
+mqtt:
+  broker: 192.168.X.X       # IP du Raspberry Pi / Venus OS (à mettre plus tard)
+  port: 1883
+  discovery: false
+
+esp32_ble_tracker:
+
+victron_ble:
+  - id: mppt1
+    mac_address: "FD:9A:09:60:17:C0"
+    bindkey: "3550b4cf81e740e13b708e916545d4da"
+  - id: mppt2
+    mac_address: "F5:6D:71:09:B0:9E"
+    bindkey: "d3b2f6d7fff9dd462cdae6042c953fb0"
+  - id: mppt3
+    mac_address: "C8:DE:05:F3:97:D4"
+    bindkey: "e336ba3cd4d4055bfea85696cb055ceb"
+
+sensor:
+  # MPPT 1
+  - platform: victron_ble
+    victron_ble_id: mppt1
+    name: "MPPT1 Battery Voltage"
+    type: BATTERY_VOLTAGE
+  - platform: victron_ble
+    victron_ble_id: mppt1
+    name: "MPPT1 Battery Current"
+    type: BATTERY_CURRENT
+  - platform: victron_ble
+    victron_ble_id: mppt1
+    name: "MPPT1 PV Power"
+    type: PV_POWER
+  - platform: victron_ble
+    victron_ble_id: mppt1
+    name: "MPPT1 Yield Today"
+    type: YIELD_TODAY
+
+  # MPPT 2
+  - platform: victron_ble
+    victron_ble_id: mppt2
+    name: "MPPT2 Battery Voltage"
+    type: BATTERY_VOLTAGE
+  - platform: victron_ble
+    victron_ble_id: mppt2
+    name: "MPPT2 Battery Current"
+    type: BATTERY_CURRENT
+  - platform: victron_ble
+    victron_ble_id: mppt2
+    name: "MPPT2 PV Power"
+    type: PV_POWER
+  - platform: victron_ble
+    victron_ble_id: mppt2
+    name: "MPPT2 Yield Today"
+    type: YIELD_TODAY
+
+  # MPPT 3
+  - platform: victron_ble
+    victron_ble_id: mppt3
+    name: "MPPT3 Battery Voltage"
+    type: BATTERY_VOLTAGE
+  - platform: victron_ble
+    victron_ble_id: mppt3
+    name: "MPPT3 Battery Current"
+    type: BATTERY_CURRENT
+  - platform: victron_ble
+    victron_ble_id: mppt3
+    name: "MPPT3 PV Power"
+    type: PV_POWER
+  - platform: victron_ble
+    victron_ble_id: mppt3
+    name: "MPPT3 Yield Today"
+    type: YIELD_TODAY
