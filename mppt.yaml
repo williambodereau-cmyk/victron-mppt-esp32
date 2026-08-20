@@ -27,7 +27,7 @@ wifi:
     password: "fallback1234"
 
 mqtt:
-  broker: 192.168.X.X       # IP du Raspberry Pi / Venus OS (à mettre plus tard)
+  broker: 192.168.10.225
   port: 1883
   discovery: false
 
