@@ -9,7 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build firmware
-        uses: esphome/build-action@v5
+       uses: esphome/build-action@v7.0.0
         id: esphome-build
         with:
           yaml-file: mppt.yaml
