@@ -2,6 +2,9 @@ name: Build ESPHome firmware
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - 'mppt.yaml'
 
 jobs:
   build:
