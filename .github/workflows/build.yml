@@ -1,0 +1,20 @@
+name: Build ESPHome firmware
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build firmware
+        uses: esphome/build-action@v7.0.0
+        id: esphome-build
+        with:
+          yaml-file: mppt.yaml
+      - name: Upload firmware
+        uses: actions/upload-artifact@v4
+        with:
+          name: firmware
+          path: ${{ steps.esphome-build.outputs.name }}
