@@ -18,7 +18,7 @@ ota:
 
 wifi:
   networks:
-    - ssid: "Cudy-b588"
+    - ssid: "Cudy"
       password: "45244773"
     - ssid: "iPhone de Bodereau William"
       password: "hiboufou"
@@ -38,7 +38,7 @@ victron_ble:
     mac_address: "FD:9A:09:60:17:C0"
     bindkey: "3550b4cf81e740e13b708e916545d4da"
   - id: mppt2
-    mac_address: "F5:6D:71:09:B0:9E"
+    mac_address: "F5:6D:71:09:B0:9F"
     bindkey: "d3b2f6d7fff9dd462cdae6042c953fb0"
   - id: mppt3
     mac_address: "C8:DE:05:F3:97:D4"
