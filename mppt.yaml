@@ -20,8 +20,6 @@ wifi:
   networks:
     - ssid: "Cudy"
       password: "45244773"
-    - ssid: "iPhone de Bodereau William"
-      password: "hiboufou"
   ap:
     ssid: "Victron-MPPT Fallback"
     password: "fallback1234"
