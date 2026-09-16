@@ -42,20 +42,58 @@ victron_ble:
     mac_address: "C8:DE:05:F3:97:D4"
     bindkey: "e336ba3cd4d4055bfea85696cb055ceb"
 
+globals:
+  - id: mppt1_v
+    type: float
+    initial_value: '0'
+  - id: mppt1_i
+    type: float
+    initial_value: '0'
+  - id: mppt1_pv
+    type: float
+    initial_value: '0'
+  - id: mppt2_v
+    type: float
+    initial_value: '0'
+  - id: mppt2_i
+    type: float
+    initial_value: '0'
+  - id: mppt2_pv
+    type: float
+    initial_value: '0'
+  - id: mppt3_v
+    type: float
+    initial_value: '0'
+  - id: mppt3_i
+    type: float
+    initial_value: '0'
+  - id: mppt3_pv
+    type: float
+    initial_value: '0'
+
 sensor:
   # MPPT 1
   - platform: victron_ble
     victron_ble_id: mppt1
     name: "MPPT1 Battery Voltage"
     type: BATTERY_VOLTAGE
+    on_value:
+      then:
+        - globals.set: {id: mppt1_v, value: !lambda 'return x;'}
   - platform: victron_ble
     victron_ble_id: mppt1
     name: "MPPT1 Battery Current"
     type: BATTERY_CURRENT
+    on_value:
+      then:
+        - globals.set: {id: mppt1_i, value: !lambda 'return x;'}
   - platform: victron_ble
     victron_ble_id: mppt1
     name: "MPPT1 PV Power"
     type: PV_POWER
+    on_value:
+      then:
+        - globals.set: {id: mppt1_pv, value: !lambda 'return x;'}
   - platform: victron_ble
     victron_ble_id: mppt1
     name: "MPPT1 Yield Today"
@@ -66,14 +104,23 @@ sensor:
     victron_ble_id: mppt2
     name: "MPPT2 Battery Voltage"
     type: BATTERY_VOLTAGE
+    on_value:
+      then:
+        - globals.set: {id: mppt2_v, value: !lambda 'return x;'}
   - platform: victron_ble
     victron_ble_id: mppt2
     name: "MPPT2 Battery Current"
     type: BATTERY_CURRENT
+    on_value:
+      then:
+        - globals.set: {id: mppt2_i, value: !lambda 'return x;'}
   - platform: victron_ble
     victron_ble_id: mppt2
     name: "MPPT2 PV Power"
     type: PV_POWER
+    on_value:
+      then:
+        - globals.set: {id: mppt2_pv, value: !lambda 'return x;'}
   - platform: victron_ble
     victron_ble_id: mppt2
     name: "MPPT2 Yield Today"
@@ -84,15 +131,49 @@ sensor:
     victron_ble_id: mppt3
     name: "MPPT3 Battery Voltage"
     type: BATTERY_VOLTAGE
+    on_value:
+      then:
+        - globals.set: {id: mppt3_v, value: !lambda 'return x;'}
   - platform: victron_ble
     victron_ble_id: mppt3
     name: "MPPT3 Battery Current"
     type: BATTERY_CURRENT
+    on_value:
+      then:
+        - globals.set: {id: mppt3_i, value: !lambda 'return x;'}
   - platform: victron_ble
     victron_ble_id: mppt3
     name: "MPPT3 PV Power"
     type: PV_POWER
+    on_value:
+      then:
+        - globals.set: {id: mppt3_pv, value: !lambda 'return x;'}
   - platform: victron_ble
     victron_ble_id: mppt3
     name: "MPPT3 Yield Today"
     type: YIELD_TODAY
+
+interval:
+  - interval: 10s
+    then:
+      - mqtt.publish:
+          topic: mppt1/solarcharger
+          payload: !lambda |-
+            char buf[200];
+            snprintf(buf, sizeof(buf), "{\"Pv\":{\"V\":%.2f},\"Yield\":{\"Power\":%.1f},\"Dc\":{\"0\":{\"Voltage\":%.2f,\"Current\":%.2f}}}",
+              id(mppt1_v), id(mppt1_pv), id(mppt1_v), id(mppt1_i));
+            return std::string(buf);
+      - mqtt.publish:
+          topic: mppt2/solarcharger
+          payload: !lambda |-
+            char buf[200];
+            snprintf(buf, sizeof(buf), "{\"Pv\":{\"V\":%.2f},\"Yield\":{\"Power\":%.1f},\"Dc\":{\"0\":{\"Voltage\":%.2f,\"Current\":%.2f}}}",
+              id(mppt2_v), id(mppt2_pv), id(mppt2_v), id(mppt2_i));
+            return std::string(buf);
+      - mqtt.publish:
+          topic: mppt3/solarcharger
+          payload: !lambda |-
+            char buf[200];
+            snprintf(buf, sizeof(buf), "{\"Pv\":{\"V\":%.2f},\"Yield\":{\"Power\":%.1f},\"Dc\":{\"0\":{\"Voltage\":%.2f,\"Current\":%.2f}}}",
+              id(mppt3_v), id(mppt3_pv), id(mppt3_v), id(mppt3_i));
+            return std::string(buf);
