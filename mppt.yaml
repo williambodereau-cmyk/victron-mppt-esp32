@@ -101,3 +101,79 @@ sensor:
 
   # MPPT 2
   - platform: victron_ble
+    victron_ble_id: mppt2
+    name: "MPPT2 Battery Voltage"
+    type: BATTERY_VOLTAGE
+    on_value:
+      then:
+        - globals.set: {id: mppt2_v, value: !lambda 'return x;'}
+  - platform: victron_ble
+    victron_ble_id: mppt2
+    name: "MPPT2 Battery Current"
+    type: BATTERY_CURRENT
+    on_value:
+      then:
+        - globals.set: {id: mppt2_i, value: !lambda 'return x;'}
+  - platform: victron_ble
+    victron_ble_id: mppt2
+    name: "MPPT2 PV Power"
+    type: PV_POWER
+    on_value:
+      then:
+        - globals.set: {id: mppt2_pv, value: !lambda 'return x;'}
+  - platform: victron_ble
+    victron_ble_id: mppt2
+    name: "MPPT2 Yield Today"
+    type: YIELD_TODAY
+
+  # MPPT 3
+  - platform: victron_ble
+    victron_ble_id: mppt3
+    name: "MPPT3 Battery Voltage"
+    type: BATTERY_VOLTAGE
+    on_value:
+      then:
+        - globals.set: {id: mppt3_v, value: !lambda 'return x;'}
+  - platform: victron_ble
+    victron_ble_id: mppt3
+    name: "MPPT3 Battery Current"
+    type: BATTERY_CURRENT
+    on_value:
+      then:
+        - globals.set: {id: mppt3_i, value: !lambda 'return x;'}
+  - platform: victron_ble
+    victron_ble_id: mppt3
+    name: "MPPT3 PV Power"
+    type: PV_POWER
+    on_value:
+      then:
+        - globals.set: {id: mppt3_pv, value: !lambda 'return x;'}
+  - platform: victron_ble
+    victron_ble_id: mppt3
+    name: "MPPT3 Yield Today"
+    type: YIELD_TODAY
+
+interval:
+  - interval: 10s
+    then:
+      - mqtt.publish:
+          topic: mppt1/solarcharger
+          payload: !lambda |-
+            char buf[200];
+            snprintf(buf, sizeof(buf), "{\"Pv\":{\"V\":%.2f},\"Yield\":{\"Power\":%.1f},\"Dc\":{\"0\":{\"Voltage\":%.2f,\"Current\":%.2f}}}",
+              id(mppt1_v), id(mppt1_pv), id(mppt1_v), id(mppt1_i));
+            return std::string(buf);
+      - mqtt.publish:
+          topic: mppt2/solarcharger
+          payload: !lambda |-
+            char buf[200];
+            snprintf(buf, sizeof(buf), "{\"Pv\":{\"V\":%.2f},\"Yield\":{\"Power\":%.1f},\"Dc\":{\"0\":{\"Voltage\":%.2f,\"Current\":%.2f}}}",
+              id(mppt2_v), id(mppt2_pv), id(mppt2_v), id(mppt2_i));
+            return std::string(buf);
+      - mqtt.publish:
+          topic: mppt3/solarcharger
+          payload: !lambda |-
+            char buf[200];
+            snprintf(buf, sizeof(buf), "{\"Pv\":{\"V\":%.2f},\"Yield\":{\"Power\":%.1f},\"Dc\":{\"0\":{\"Voltage\":%.2f,\"Current\":%.2f}}}",
+              id(mppt3_v), id(mppt3_pv), id(mppt3_v), id(mppt3_i));
+            return std::string(buf);
